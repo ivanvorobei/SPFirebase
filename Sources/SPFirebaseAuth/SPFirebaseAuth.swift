@@ -34,6 +34,8 @@ public enum SPFirebaseAuth {
     
     public static func configure(authDidChangedWork: @escaping ()->Void) {
         debug("Start configure.")
+        // Save cached userID.
+        cached_user_id = self.userID
         // Listner Events
         FirebaseAuthService.configure(authDidChangedWork: {
             if let newUserID = self.userID {
@@ -71,10 +73,10 @@ public enum SPFirebaseAuth {
             }
             FirebaseAuthService.signInApple(token: authData.token, completion: { error in
                 if let error = error {
-                    debug("Sign in with Apple faild with error: \(error.localizedDescription).")
-                    completion(nil, .notCompleted)
+                    debug("Sign In with Apple faild with error: \(error.localizedDescription).")
+                    completion(nil, .faild)
                 } else {
-                    debug("Sign in with Apple success with name: \(authData.name ?? "Can't get name").")
+                    debug("Sign In with Apple success with name: \(authData.name ?? "Can't get name").")
                     // Set email if Apple can't return it.
                     if authData.email == nil {
                         authData.email = FirebaseAuthService.userEmail
@@ -92,10 +94,10 @@ public enum SPFirebaseAuth {
     public static func signInAnonymously(completion: @escaping (SPFirebaseAuthError?) -> Void) {
         FirebaseAuthService.signInAnonymously(comlection: { error in
             if let error = error {
-                debug("Sign in Anonymously faild with error: \(error.localizedDescription).")
-                completion(.notCompleted)
+                debug("Sign In Anonymously faild with error: \(error.localizedDescription).")
+                completion(.faild)
             } else {
-                debug("Sign in Anonymously success.")
+                debug("Sign In Anonymously success.")
                 completion(nil)
             }
         })
@@ -103,8 +105,9 @@ public enum SPFirebaseAuth {
     
     public static func signOut(completion: @escaping (SPFirebaseAuthError?)->Void) {
         FirebaseAuthService.signOut(completion: { error in
-            if let _ = error {
-                completion(.notCompleted)
+            if let error = error {
+                debug("Sign Out faild with error: \(error.localizedDescription).")
+                completion(.faild)
             } else {
                 completion(nil)
             }

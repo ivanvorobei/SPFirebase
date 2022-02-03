@@ -25,13 +25,13 @@ public enum SPFirebaseAuthError: LocalizedError {
     
     case canceled
     case cantPresent
-    case notCompleted
+    case faild
     
     public var errorDescription: String? {
         switch self {
         case .canceled: return ""
         case .cantPresent: return ""
-        case .notCompleted: return ""
+        case .faild: return ""
         }
     }
 }

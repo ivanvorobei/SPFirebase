@@ -19,11 +19,40 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import FirebaseMessaging
 
-public struct SPFirebaseAuthData {
+public enum SPFirebaseMessaging {
     
-    var token: String
-    public var name: String?
-    public var email: String?
+    public static func addFCMTokenDidChangeListener(_ listner: @escaping ( _ fcmToken: String?) -> Void) {
+        MessagingService.shared.listenerClouser = listner
+    }
+    
+    public static func removeFCMTokenDidChangeListener() {
+        MessagingService.shared.listenerClouser = nil
+    }
+    
+    private class MessagingService: NSObject, MessagingDelegate {
+        
+        // MARK: - MessagingDelegate
+        
+        func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+            listenerClouser?(fcmToken)
+        }
+        
+        // MARK: - Singltone
+        
+        internal var listenerClouser: ((String?) -> Void)? = nil {
+            didSet {
+                if listenerClouser == nil {
+                    Messaging.messaging().delegate = nil
+                } else {
+                    Messaging.messaging().delegate = MessagingService.shared
+                }
+            }
+        }
+        
+        internal static var shared = MessagingService()
+        private override init() { super.init() }
+    }
+    
 }
