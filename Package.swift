@@ -20,6 +20,10 @@ let package = Package(
         .library(
             name: "SPFirebaseMessaging",
             targets: ["SPFirebaseMessaging"]
+        ),
+        .library(
+            name: "SPFirebaseStorage",
+            targets: ["SPFirebaseStorage"]
         )
     ],
     dependencies: [
@@ -40,6 +44,13 @@ let package = Package(
             name: "SPFirebaseFirestore",
             dependencies: [
                 .product(name: "FirebaseFirestore", package: "Firebase"),
+                .target(name: "SPFirebase")
+            ]
+        ),
+        .target(
+            name: "SPFirebaseStorage",
+            dependencies: [
+                .product(name: "FirebaseStorage", package: "Firebase"),
                 .target(name: "SPFirebase")
             ]
         ),
