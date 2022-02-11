@@ -114,6 +114,17 @@ public enum SPFirebaseAuth {
         })
     }
     
+    public static func delete(completion: @escaping (SPFirebaseAuthError?)->Void) {
+        FirebaseAuthService.delete(completion: { error in
+            if let error = error {
+                debug("Delete user faild with error: \(error.localizedDescription).")
+                completion(.faild)
+            } else {
+                completion(nil)
+            }
+        })
+    }
+    
     // MARK: - Private
     
     static func debug(_ text: String) {
