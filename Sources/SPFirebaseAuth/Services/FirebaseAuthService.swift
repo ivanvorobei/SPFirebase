@@ -65,6 +65,13 @@ class FirebaseAuthService {
         }
     }
     
+    static func delete(completion: @escaping (Error?)->Void) {
+        let user = Auth.auth().currentUser
+        user?.delete(completion: { error in
+            completion(error)
+        })
+    }
+    
     // MARK: - Singltone
     
     private var observer: AuthStateDidChangeListenerHandle?
