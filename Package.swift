@@ -44,6 +44,7 @@ let package = Package(
             name: "SPFirebaseAuth",
             dependencies: [
                 .product(name: "FirebaseAuth", package: "Firebase"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn"),
                 .target(name: "SPFirebase")
             ]
         ),
