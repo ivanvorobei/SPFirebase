@@ -91,6 +91,37 @@ public enum SPFirebaseAuth {
         }
     }
     
+    public static func signInGoogle(on controller: UIViewController, completion: @escaping (SPFirebaseAuthData?, SPFirebaseAuthError?) -> Void) {
+        guard controller.view.window != nil else {
+            completion(nil, .cantPresent)
+            return
+        }
+        GoogleAuthService.signIn(on: controller) { data in
+            guard var authData = data else {
+                completion(nil, .canceled)
+                return
+            }
+            
+            FirebaseAuthService.signInGoogle(token: authData.token, accessToken: authData.accessToken) { error in
+                if let error = error {
+                    debug("Sign In with Google faild with error: \(error.localizedDescription).")
+                    completion(nil, .faild)
+                } else {
+                    debug("Sign In with Google success with name: \(authData.name ?? "Can't get name").")
+                    // Set email if Apple can't return it.
+                    if authData.email == nil {
+                        authData.email = FirebaseAuthService.userEmail
+                    }
+                    // Set name if Apple can't return it.
+                    if authData.name == nil {
+                        authData.name = FirebaseAuthService.userName
+                    }
+                    completion(authData, nil)
+                }
+            }
+        }
+    }
+    
     public static func signInAnonymously(completion: @escaping (SPFirebaseAuthError?) -> Void) {
         FirebaseAuthService.signInAnonymously(comlection: { error in
             if let error = error {
