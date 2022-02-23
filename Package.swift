@@ -30,6 +30,10 @@ let package = Package(
         .package(
             name: "Firebase",
             url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.12.1")
+        ),
+        .package(
+            name: "GoogleSignIn",
+            url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "6.0.0")
         )
     ],
     targets: [
@@ -40,6 +44,7 @@ let package = Package(
             name: "SPFirebaseAuth",
             dependencies: [
                 .product(name: "FirebaseAuth", package: "Firebase"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn"),
                 .target(name: "SPFirebase")
             ]
         ),
