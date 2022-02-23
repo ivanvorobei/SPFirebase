@@ -23,7 +23,7 @@ import Foundation
 
 public struct SPFirebaseAuthData {
     
-    var token: String
+    public var token: String
     var accessToken: String?
     public var name: String?
     public var email: String?
