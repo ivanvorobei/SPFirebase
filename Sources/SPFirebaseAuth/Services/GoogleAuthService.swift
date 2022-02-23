@@ -19,12 +19,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import Foundation
+import UIKit
+import GoogleSignIn
+import Firebase
 
-public struct SPFirebaseAuthData {
+class GoogleAuthService: NSObject {
     
-    var token: String
-    var accessToken: String?
-    public var name: String?
-    public var email: String?
+    static func signIn(on viewController: UIViewController, completion: ((SPFirebaseAuthData?) -> Void)?) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: viewController) {user, error in
+            
+            guard error == nil else { completion?(nil); return }
+            
+            guard
+                let authentication = user?.authentication,
+                let idToken = authentication.idToken
+            else {
+                completion?(nil)
+                return
+            }
+            
+            let data = SPFirebaseAuthData(token: idToken, accessToken: authentication.accessToken)
+            completion?(data)
+        }
+    }
 }

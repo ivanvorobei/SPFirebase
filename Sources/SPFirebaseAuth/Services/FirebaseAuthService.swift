@@ -20,6 +20,7 @@
 // SOFTWARE.
 
 import FirebaseAuth
+import GoogleSignIn
 
 class FirebaseAuthService {
     
@@ -45,6 +46,26 @@ class FirebaseAuthService {
     
     static func signInApple(token: String, completion: @escaping (Error?) -> Void) {
         let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: token, rawNonce: nil)
+        Auth.auth().signIn(with: credential) { (result, error) in
+            completion(error)
+        }
+    }
+    
+    static func signInGoogle(token: String, accessToken: String?, completion: @escaping (Error?) -> Void) {
+        guard let accessToken = accessToken else {
+            let error = NSError(
+                      domain: "GIDSignInError",
+                      code: -1,
+                      userInfo: [
+                        NSLocalizedDescriptionKey: "Unexpected sign in result: required authentication data is missing.",
+                      ]
+                    )
+            completion(error)
+            return
+        }
+
+        
+        let credential = GoogleAuthProvider.credential(withIDToken: token, accessToken: accessToken)
         Auth.auth().signIn(with: credential) { (result, error) in
             completion(error)
         }
