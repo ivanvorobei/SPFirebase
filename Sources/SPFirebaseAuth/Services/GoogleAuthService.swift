@@ -28,18 +28,14 @@ class GoogleAuthService: NSObject {
     static func signIn(on viewController: UIViewController, completion: ((SPFirebaseAuthData?) -> Void)?) {
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         
-        // Create Google Sign In configuration object.
+        // Create Google Sign In configuration object
         let config = GIDConfiguration(clientID: clientID)
         
-        // Start the sign in flow!
+        // Start the sign in flow
         GIDSignIn.sharedInstance.signIn(with: config, presenting: viewController) {user, error in
             
             guard error == nil else { completion?(nil); return }
-            
-            guard
-                let authentication = user?.authentication,
-                let idToken = authentication.idToken
-            else {
+            guard let authentication = user?.authentication, let idToken = authentication.idToken else {
                 completion?(nil)
                 return
             }

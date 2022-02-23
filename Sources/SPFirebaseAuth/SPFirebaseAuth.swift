@@ -101,7 +101,6 @@ public enum SPFirebaseAuth {
                 completion(nil, .canceled)
                 return
             }
-            
             FirebaseAuthService.signInGoogle(token: authData.token, accessToken: authData.accessToken) { error in
                 if let error = error {
                     debug("Sign In with Google faild with error: \(error.localizedDescription).")
