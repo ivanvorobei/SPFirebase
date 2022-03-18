@@ -29,11 +29,11 @@ let package = Package(
     dependencies: [
         .package(
             name: "Firebase",
-            url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.12.1")
+            url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.13.0")
         ),
         .package(
             name: "GoogleSignIn",
-            url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "6.0.0")
+            url: "https://github.com/google/GoogleSignIn-iOS", .upToNextMajor(from: "6.1.0")
         )
     ],
     targets: [
